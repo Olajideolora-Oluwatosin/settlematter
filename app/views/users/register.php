@@ -30,7 +30,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
         rel="stylesheet" />
     <link href="<?=URLROOT?>/assets/user-assets/vendors/simplebar/simplebar.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../../../unicons.iconscout.com/release/v4.0.8/css/line.css" />
     <link href="<?=URLROOT?>/assets/user-assets/css/theme-rtl.min.css" type="text/css" rel="stylesheet"
         id="style-rtl" />
     <link href="<?=URLROOT?>/assets/user-assets/css/theme.min.css" type="text/css" rel="stylesheet"
@@ -40,6 +39,11 @@
     <link href="<?=URLROOT?>/assets/user-assets/css/user.min.css" type="text/css" rel="stylesheet"
         id="user-style-default" />
     <link rel="stylesheet" href="<?=URLROOT?>/css/font-awesome/css/all.css" />
+    <style>
+    .invalid-feedback {
+        display: block;
+    }
+    </style>
     <script>
     var phoenixIsRTL = window.config.config.phoenixIsRTL;
     if (phoenixIsRTL) {
@@ -61,7 +65,9 @@
     <!-- ===============================================-->
     <!--    Main Content-->
     <!-- ===============================================-->
+
     <main class="main" id="top">
+
         <div class="container-fluid bg-body-tertiary dark__bg-gray-1200">
             <div class="bg-holder bg-auth-card-overlay" style="background-color: rgb(243 233 210)"></div>
             <!--/.bg-holder-->
@@ -89,74 +95,103 @@
                                                 Fill all Fields
                                             </div>
                                         </div>
-                                        <div class="mb-3 text-start auth">
-                                            <label class="form-label" for="username">Username</label>
-                                            <div class="form-icon-container auth-input">
-                                                <input class="form-control form-icon-input" id="username" type="text"
-                                                    placeholder="username" /><span
-                                                    class="fas fa-user text-body fs-9 form-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 text-start auth">
-                                            <label class="form-label" for="email">Email address</label>
-                                            <div class="form-icon-container auth-input">
-                                                <input class="form-control form-icon-input" id="email" type="email"
-                                                    placeholder="name@example.com" /><span
-                                                    class="fas fa-user text-body fs-9 form-icon"></span>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 text-start auth">
-                                            <label class="form-label" for="password">Password</label>
-                                            <div class="form-icon-container auth-input" data-password="data-password">
-                                                <input class="form-control form-icon-input pe-6" id="password"
-                                                    type="password" placeholder="Password"
-                                                    data-password-input="data-password-input" /><span
-                                                    class="fas fa-key text-body fs-9 form-icon"></span><button
-                                                    class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
-                                                    data-password-toggle="data-password-toggle">
-                                                    <i class="fas fa-eye show"
-                                                        style="color: grey; font-size: 12px"></i><i
-                                                        style="color: grey; font-size: 12px"
-                                                        class="fas fa-eye-slash hide"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 text-start auth">
-                                            <label class="form-label" for="password">Confirm Password</label>
-                                            <div class="form-icon-container auth-input" data-password="data-password">
-                                                <input class="form-control form-icon-input pe-6" id="password"
-                                                    type="password" placeholder="Confirm Password"
-                                                    data-password-input="data-password-input" /><span
-                                                    class="fas fa-key text-body fs-9 form-icon"></span><button
-                                                    class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
-                                                    data-password-toggle="data-password-toggle">
-                                                    <i class="fas fa-eye show"
-                                                        style="color: grey; font-size: 12px"></i><i
-                                                        style="color: grey; font-size: 12px"
-                                                        class="fas fa-eye-slash hide"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row flex-between-center mb-7">
-                                            <div class="col-auto">
-                                                <div class="form-check mb-0">
-                                                    <input class="form-check-input" id="basic-checkbox" type="checkbox"
-                                                        checked="checked" /><label class="form-check-label mb-0"
-                                                        for="basic-checkbox">Terms and condition</label>
+                                        <!-- Flash Message for General Errors -->
+                                        <?= flash('flash_message'); ?>
+                                        <form action="<?=URLROOT?>/users/register" method="POST">
+                                            <input type="hidden" name="csrf_token"
+                                                value="<?= htmlspecialchars($data['csrf_token'] ?? '') ?>">
+                                            <div class="mb-3 text-start auth">
+                                                <label class="form-label" for="username">Username</label>
+                                                <div class="form-icon-container auth-input">
+                                                    <input type="text"
+                                                        class="form-control form-icon-input  <?= !empty($data['errors']['username']) ? 'is-invalid' : ''; ?>"
+                                                        name="username" placeholder="Enter Your Username"
+                                                        value="<?= htmlspecialchars($data['username']); ?>" required>
+                                                    <span class="fas fa-user text-body fs-9 form-icon"></span>
                                                 </div>
+                                                <span
+                                                    class="invalid-feedback"><?= $data['errors']['username'] ?? ''; ?></span>
                                             </div>
-                                            <!-- <div class="col-auto auth-forgot">
-                          <a
-                            class="fs-9 fw-semibold"
-                            href="forgot-password.html"
-                            >Forgot Password?</a
-                          >
-                        </div> -->
-                                        </div>
-                                        <button class="btn btn-primary w-100 mb-3 auth-btn">
-                                            Sign Up
-                                        </button>
+                                            <div class="mb-3 text-start auth">
+                                                <label class="form-label" for="email">Email address</label>
+                                                <div class="form-icon-container auth-input">
+                                                    <input type="email"
+                                                        class="form-control form-icon-input <?= !empty($data['errors']['email']) ? 'is-invalid' : ''; ?>"
+                                                        name="email" placeholder="Enter Your Email"
+                                                        value="<?= htmlspecialchars($data['email']); ?>" required>
+                                                    <span class="fas fa-message text-body fs-9 form-icon"></span>
+                                                </div>
+                                                <span
+                                                    class="invalid-feedback"><?= $data['errors']['email'] ?? ''; ?></span>
+                                            </div>
+                                            <div class="mb-3 text-start auth">
+                                                <label class="form-label" for="password">Password</label>
+                                                <div class="form-icon-container auth-input"
+                                                    data-password="data-password">
+                                                    <input
+                                                        class="form-control form-icon-input pe-6 <?= !empty($data['errors']['password']) ? 'is-invalid' : ''; ?>"
+                                                        id="
+                                                        password" type="password" placeholder="Password"
+                                                        name="password"
+                                                        data-password-input="data-password-input" /><span
+                                                        class="fas fa-key text-body fs-9 form-icon"></span>
+                                                    <button type="button"
+                                                        class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
+                                                        data-password-toggle="data-password-toggle">
+                                                        <i class="fas fa-eye show"
+                                                            style="color: grey; font-size: 12px"></i><i
+                                                            style="color: grey; font-size: 12px"
+                                                            class="fas fa-eye-slash hide"></i>
+                                                    </button>
+                                                </div>
+                                                <span
+                                                    class="invalid-feedback"><?= $data['errors']['password'] ?? ''; ?></span>
+                                            </div>
+                                            <div class="mb-3 text-start auth">
+                                                <label class="form-label" for="password">Confirm Password</label>
+                                                <div class="form-icon-container auth-input"
+                                                    data-password="data-password">
+                                                    <input
+                                                        class="form-control form-icon-input pe-6 <?= !empty($data['errors']['confirm_password']) ? 'is-invalid' : ''; ?>"
+                                                        id="
+                                                        password" type="password" placeholder="Confirm Password"
+                                                        name="confirm_password"
+                                                        data-password-input="data-password-input" /><span
+                                                        class="fas fa-key text-body fs-9 form-icon"></span>
+                                                    <button type="button"
+                                                        class="btn px-3 py-0 h-100 position-absolute top-0 end-0 fs-7 text-body-tertiary"
+                                                        data-password-toggle="data-password-toggle">
+                                                        <i class="fas fa-eye show"
+                                                            style="color: grey; font-size: 12px"></i><i
+                                                            style="color: grey; font-size: 12px"
+                                                            class="fas fa-eye-slash hide"></i>
+                                                    </button>
+                                                </div>
 
+                                                <span
+                                                    class="invalid-feedback"><?= $data['errors']['confirm_password'] ?? ''; ?></span>
+                                            </div>
+                                            <div class="row flex-between-center mb-7">
+                                                <div class="col-auto">
+                                                    <div class="form-check mb-0">
+                                                        <input class="form-check-input" id="basic-checkbox"
+                                                            type="checkbox" checked="checked" /><label
+                                                            class="form-check-label mb-0" for="basic-checkbox">Terms and
+                                                            condition</label>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-auto auth-forgot">
+                                            <a
+                                                class="fs-9 fw-semibold"
+                                                href="forgot-password.html"
+                                                >Forgot Password?</a
+                                            >
+                                            </div> -->
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100 mb-3 auth-btn">
+                                                Sign Up
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

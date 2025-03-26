@@ -10,10 +10,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <?php 
-$current_page = basename($_SERVER['REQUEST_URI'], ".php"); 
-echo $current_page;
-?>
+            <?php $current_page = basename($_SERVER['REQUEST_URI'], ".php"); ?>
             <!-- Navigation Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">

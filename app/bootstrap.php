@@ -8,6 +8,7 @@ require_once 'config/config.php';
 // Load Helpers
 require_once 'helpers/url_helper.php';
 require_once 'helpers/session_helper.php';
+require_once 'helpers/validations/register.php';
 
 // Set Global Exception Handler
 set_exception_handler(function ($e) {
@@ -66,7 +67,15 @@ spl_autoload_register(function ($className) {
     if (file_exists($file)) {
         require_once $file;
     } else {
-        die("Error: Class '$className' not found.");
+        if (APP_ENV === 'development') {
+            echo "<h2 style='color: red;'>Application Error</h2>";
+            echo "<p><strong>Message:</strong> Class '$className' not found in libraries. </p>";
+            exit;
+        }
+        error_log("[" . date('Y-m-d H:i:s') . "] Class '$className' not found in libraries.", 3, __DIR__ . '/logs/error.log');
+        http_response_code(500);
+        echo "<h2>Something went wrong. Please contact support.</h2>";
+        exit;
     }
 });
 

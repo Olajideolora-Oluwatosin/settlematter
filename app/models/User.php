@@ -9,23 +9,14 @@
     // Add User / Register
     public function register($data){
       // Prepare Query
-      $this->db->query('INSERT INTO users (fullname, type, accountno, email, password, country, mobile, address, occupation,dob,gender, passport, currency) 
-      VALUES (:fullname, :type, :accountno, :email, :password, :country, :mobile, :address, :occupation,:dob,:gender, :passport, :currency)');
+      $this->db->query('INSERT INTO users (uuid, username, email, password) 
+      VALUES (:uuid, :username, :email, :password)');
 
       // Bind Values
-      $this->db->bind(':fullname', $data['fullname']);
-      $this->db->bind(':type', $data['type']);
-      $this->db->bind(':accountno', $data['accountno']);
+      $this->db->bind(':uuid', $data['uuid']);
+      $this->db->bind(':username', $data['username']);
       $this->db->bind(':email', $data['email']);
       $this->db->bind(':password', $data['password']);
-      $this->db->bind(':country', $data['country']);
-      $this->db->bind(':mobile', $data['mobile']);
-      $this->db->bind(':address', $data['address']);
-      $this->db->bind(':occupation', $data['occupation']);
-      $this->db->bind(':dob', $data['dob']);
-      $this->db->bind(':gender', $data['gender']);
-      $this->db->bind(':passport', $data['passport_url']);
-      $this->db->bind(':currency', $data['currency_type']);
       
       //Execute
       if($this->db->execute()){
@@ -96,9 +87,9 @@
     }
 
     // Login / Authenticate User
-    public function login($accountno, $password){
-      $this->db->query("SELECT * FROM users WHERE accountno = :accountno");
-      $this->db->bind(':accountno', $accountno);
+    public function login($email, $password){
+      $this->db->query("SELECT * FROM users WHERE email = :email");
+      $this->db->bind(':email', $email);
 
       $row = $this->db->single();
       
