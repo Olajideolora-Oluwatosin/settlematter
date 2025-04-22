@@ -94,6 +94,8 @@
                                         </div>
                                         <form action="<?=URLROOT?>/users/login" method="POST">
                                             <div class="mb-3 text-start auth">
+                                                <input type="hidden" name="csrf_token"
+                                                    value="<?= htmlspecialchars($data['csrf_token'] ?? '') ?>">
                                                 <label class="form-label" for="email">Email address</label>
                                                 <div class="form-icon-container auth-input">
                                                     <input type="email"

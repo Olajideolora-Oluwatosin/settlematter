@@ -30,10 +30,22 @@
                         <a class="nav-link <?= $current_page == 'rewards' ? 'activate' : '' ?>"
                             href="<?=URLROOT?>/rewards">Rewards</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item mb-10">
                         <a class="nav-link <?= $current_page == 'faq' ? 'activate' : '' ?>"
                             href="<?=URLROOT?>/pages/faq">FAQs</a>
                     </li>
+                    <div class="user-hidden">
+                        <?php if (isLoggedIn()): ?>
+                        <p><span class="badge badge-primary">Welcome,
+                                <?= htmlspecialchars($_SESSION[SESSION_NAMESPACE . 'username']) ?>!</span> <a
+                                style="text-decoration: none;" class="btn btn-danger text-white"
+                                href="<?= URLROOT ?>/users/logout">Logout</a>
+                        </p>
+
+                        <?php else: ?>
+                        <a href="<?=URLROOT?>/users/login" class="btn btn-primary sign-up">Sign In</a>
+                        <?php endif; ?>
+                    </div>
                     <!-- <li class="nav-item">
                         <a class="nav-link" href="dashboard.html">Dashboards</a>
                     </li> -->
@@ -43,7 +55,23 @@
             <!-- Contact Section -->
             <div class="d-none d-lg-block auth">
                 <!-- <a href="#" class="btn btn-primary profile">Profile</a> -->
-                <a href="<?=URLROOT?>/users/register" class="btn btn-primary sign-up">sign Up</a>
+
+                <?php if (isLoggedIn()): ?>
+                <p><span class="badge badge-primary">Welcome,
+                        <?= htmlspecialchars($_SESSION[SESSION_NAMESPACE . 'username']) ?>!</span> <a
+                        style="text-decoration: none;" class="btn btn-danger text-white"
+                        href="<?= URLROOT ?>/users/logout">Logout</a>
+                </p>
+
+                <?php else: ?>
+                <a href="<?=URLROOT?>/users/login" class="btn btn-primary sign-up">Sign In</a>
+                <?php endif; ?>
+
+                <!-- 
+
+                <a href="<?=URLROOT?>/users/login" class="btn btn-primary sign-up">Sign In</a>
+
+                <a href="" style="color: white; text-decoration: none; font-weight: bold"> Hi James Tolu</a> -->
             </div>
         </div>
     </nav>

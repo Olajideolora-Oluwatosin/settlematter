@@ -89,7 +89,7 @@
 
     <!-- Frequestly asked question section -->
 
-    <div class=" faq">
+    <!-- <div class=" faq">
         <h3>Frequently Asked Question</h3>
         <div class="wrap-1">
             <input type="radio" class="input-tabs" id="tab-1" name="tabs">
@@ -150,8 +150,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
 
 
 

@@ -10,8 +10,12 @@
     </div>
 
 
-    <div class=" faq">
-        <div class="wrap-1">
+    <div class=" mb-10 faq">
+        <div>
+
+            <h1 style="color: red;">Page Under Construction</h1>
+        </div>
+        <!-- <div class="wrap-1">
             <input type="radio" class="input-tabs" id="tab-1" name="tabs">
             <label for="tab-1">
                 <div>tab one</div>
@@ -77,7 +81,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
 

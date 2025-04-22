@@ -1,4 +1,10 @@
 <?php
+define('SESSION_NAMESPACE', 'settlematter_');
+define('SESSION_USER_KEY', SESSION_NAMESPACE . 'user_id');
+
+session_name('SETTLEMATTER_SESSION'); 
+session_start();
+
 // Load environment variables if available
 $envFile = dirname(__DIR__) . '/.env';
 if (file_exists($envFile)) {

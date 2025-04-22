@@ -1,18 +1,20 @@
 <?php
-class Polls extends Controller{
-    
+class Polls extends Controller
+{
 
-    
-    public function __construct(){
+    private $pollModel;
 
+    public function __construct()
+    {
+        $this->pollModel = $this->model('Poll');
     }
-
-    public function index(){
-        
-     
-          // Load View
-          $this->view('polls/index');
-
+    public function index()
+    {
+        $userid = $_SESSION[SESSION_USER_KEY] ?? null;
+        $polls = $this->pollModel->getAllPolls($userid);
+        // Load View
+        $this->view('polls/index', [
+            'polls' => $polls
+        ]);
     }
-
 }

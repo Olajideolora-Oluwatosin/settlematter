@@ -5,10 +5,15 @@ ob_start();
 require_once 'config/config.php';
 
 
-// Load Helpers
-require_once 'helpers/url_helper.php';
-require_once 'helpers/session_helper.php';
-require_once 'helpers/validations/register.php';
+// Load all top-level helper files (excluding subdirectories like validations)
+foreach (glob(__DIR__ . '/helpers/*.php') as $helperFile) {
+    require_once $helperFile;
+}
+
+// Load all validation files from the validations subfolder
+foreach (glob(__DIR__ . '/helpers/validations/*.php') as $validationFile) {
+    require_once $validationFile;
+}
 
 // Set Global Exception Handler
 set_exception_handler(function ($e) {

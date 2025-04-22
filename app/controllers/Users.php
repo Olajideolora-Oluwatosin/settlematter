@@ -5,11 +5,9 @@ use Ramsey\Uuid\Uuid;
 
 class Users extends Controller
 {
-  private $accountModel;
   private $userModel;
   public function __construct()
   {
-    $this->accountModel = $this->model('Account');
     $this->userModel = $this->model('User');
   }
 
@@ -31,7 +29,7 @@ class Users extends Controller
   public function register()
   {
     // Redirect if already logged in
-    if ($this->isLoggedIn()) {
+    if (isLoggedIn()) {
       redirect('registrations/add');
       return;
     }
@@ -104,7 +102,7 @@ class Users extends Controller
   public function login()
 {
     // Redirect if already logged in
-    if ($this->isLoggedIn()) {
+    if (isLoggedIn()) {
         redirect('pages/dashboard');
         return;
     }
@@ -163,9 +161,9 @@ class Users extends Controller
   // Create User Session
   private function createUserSession($user)
   {
-    $_SESSION['settlematter_user_id'] = $user->id;
-    $_SESSION['email'] = $user->email;
-    $_SESSION['username'] = $user->username;
+    $_SESSION[SESSION_USER_KEY] = $user->uuid;
+    $_SESSION[SESSION_NAMESPACE . 'email'] = $user->email;
+    $_SESSION[SESSION_NAMESPACE . 'username'] = $user->username;
     redirect('pages/index');
   }
 
@@ -177,9 +175,5 @@ class Users extends Controller
     redirect('users/login');
   }
 
-  // Check if User is Logged In
-  private function isLoggedIn(): bool
-  {
-    return isset($_SESSION['settlematter_user_id']);
-  }
+
 }
