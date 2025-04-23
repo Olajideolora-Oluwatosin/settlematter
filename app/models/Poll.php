@@ -10,8 +10,8 @@ class Poll
     }
 
     public function getAllPolls($userId)
-{
-    $this->db->query("
+    {
+        $this->db->query("
         SELECT 
             p.id AS poll_id,
             p.question,
@@ -26,35 +26,35 @@ class Poll
             pollvotes pv ON pv.poll_id = p.id AND pv.user_id = :userId
     ");
 
-    $this->db->bind(':userId', $userId);
-    $rows = $this->db->resultSet();
+        $this->db->bind(':userId', $userId);
+        $rows = $this->db->resultSet();
 
-    // Group answers under each poll
-    $polls = [];
+        // Group answers under each poll
+        $polls = [];
 
-    foreach ($rows as $row) {
-        $pollId = $row->poll_id;
+        foreach ($rows as $row) {
+            $pollId = $row->poll_id;
 
-        if (!isset($polls[$pollId])) {
-            $polls[$pollId] = [
-                'id' => $pollId,
-                'question' => $row->question,
-                'hasVoted' => $row->voted_user !== null,
-                'answers' => []
-            ];
+            if (!isset($polls[$pollId])) {
+                $polls[$pollId] = [
+                    'id' => $pollId,
+                    'question' => $row->question,
+                    'hasVoted' => $row->voted_user !== null,
+                    'answers' => []
+                ];
+            }
+
+            if ($row->answer_id) {
+                $polls[$pollId]['answers'][] = [
+                    'id' => $row->answer_id,
+                    'text' => $row->answer_text
+                ];
+            }
         }
 
-        if ($row->answer_id) {
-            $polls[$pollId]['answers'][] = [
-                'id' => $row->answer_id,
-                'text' => $row->answer_text
-            ];
-        }
+        return array_values($polls);
     }
 
-    return array_values($polls);
-}
-    
     public function getFeaturedPolls()
     {
         $this->db->query("SELECT p.id AS poll_id, p.question, pa.id AS answer_id, pa.answer AS answer_text FROM poll p LEFT JOIN pollanswer pa ON p.id = pa.pollId WHERE p.featured = 1");
@@ -86,8 +86,8 @@ class Poll
         return array_values($polls);
     }
     public function getLoggedInFeaturedPolls($userId)
-{
-    $this->db->query("
+    {
+        $this->db->query("
         SELECT 
             p.id AS poll_id,
             p.question,
@@ -104,34 +104,55 @@ class Poll
             p.featured = 1
     ");
 
-    $this->db->bind(':userId', $userId);
-    $rows = $this->db->resultSet();
+        $this->db->bind(':userId', $userId);
+        $rows = $this->db->resultSet();
 
-    // Group answers under each poll
-    $polls = [];
+        // Group answers under each poll
+        $polls = [];
 
-    foreach ($rows as $row) {
-        $pollId = $row->poll_id;
+        foreach ($rows as $row) {
+            $pollId = $row->poll_id;
 
-        if (!isset($polls[$pollId])) {
-            $polls[$pollId] = [
-                'id' => $pollId,
-                'question' => $row->question,
-                'hasVoted' => $row->voted_user !== null,
-                'answers' => []
-            ];
+            if (!isset($polls[$pollId])) {
+                $polls[$pollId] = [
+                    'id' => $pollId,
+                    'question' => $row->question,
+                    'hasVoted' => $row->voted_user !== null,
+                    'answers' => []
+                ];
+            }
+
+            if ($row->answer_id) {
+                $polls[$pollId]['answers'][] = [
+                    'id' => $row->answer_id,
+                    'text' => $row->answer_text
+                ];
+            }
         }
 
-        if ($row->answer_id) {
-            $polls[$pollId]['answers'][] = [
-                'id' => $row->answer_id,
-                'text' => $row->answer_text
-            ];
-        }
+        return array_values($polls);
     }
 
-    return array_values($polls);
-}
+    public function getPointSetting()
+    {
+        $this->db->query("SELECT * FROM points");
+        return $this->db->single();
+    }
+    public function getUserTotalPoints($userId)
+    {
+        $this->db->query("SELECT * FROM pollVotes WHERE user_id = :userId");
+        $this->db->bind(':userId', $userId);
+
+        $this->db->execute();
+
+        return $this->db->rowCount();
+    }
+    public function getTotalVoterCount()
+    {
+        $this->db->query("SELECT COUNT(DISTINCT user_id) as total FROM pollVotes");
+        return $this->db->single();
+    }
+
 
     public function hasUserVoted($pollId, $userId)
     {
@@ -147,5 +168,47 @@ class Poll
         $this->db->bind(':answerId', $answerId);
         $this->db->bind(':userId', $userId);
         return $this->db->execute();
+    }
+
+    public function getUsersByVoteCount()
+    {
+        $this->db->query("
+        SELECT 
+            u.uuid AS user_id,
+            u.username,
+            COUNT(pv.id) AS vote_count
+        FROM 
+            users u
+        JOIN 
+            pollvotes pv ON u.uuid = pv.user_id
+        GROUP BY 
+            u.uuid, u.username
+        ORDER BY 
+            vote_count DESC
+            LIMIT 10
+    ");
+
+        return $this->db->resultSet();
+    }
+    public function getUsersByVoteCountWithPagination($limit, $offset)
+    {
+        $this->db->query("
+        SELECT 
+            u.uuid AS user_id,
+            u.username,
+            COUNT(pv.id) AS vote_count
+        FROM 
+            users u
+        JOIN 
+            pollvotes pv ON u.uuid = pv.user_id
+        GROUP BY 
+            u.uuid, u.username
+        ORDER BY 
+            vote_count DESC
+            LIMIT :limit OFFSET :offset
+    ");
+        $this->db->bind(':limit', $limit);
+        $this->db->bind(':offset', $offset);
+        return $this->db->resultSet();
     }
 }

@@ -8,7 +8,14 @@
         </div>
         <div class="lower-section">
             <div class="leaderboard">
-                <table class="table redeem">
+                <div style="color: black;" align="right">
+
+                    <?php if(isset($_SESSION[SESSION_USER_KEY])):?>
+                    Total point:<strong> <?= $data['pointsuserTotalVote'] ?></strong>
+
+                    <?php endif?>
+                </div>
+                <table class=" table redeem">
                     <thead class="">
                         <tr>
                             <th>Reward</th>
@@ -18,18 +25,36 @@
                     <tbody>
                         <tr>
                             <td>Amazon Gift Card</td>
-                            <td>500 Points</td>
-                            <td><a class="btn btn-success">Redeem</a></td>
+                            <td>500 - 699 Points</td>
+                            <?php if (($data['pointsuserTotalVote'] > 499) && ($data['pointsuserTotalVote'] < 700)): ?>
+                            <td>
+                                <button class="btn btn-success">Redeem</button>
+                            </td>
+                            <?php else: ?>
+                            <td> <button class="btn btn-success" disabled>Redeem</button></td>
+                            <?php endif; ?>
                         </tr>
                         <tr>
                             <td>Spotify Premium</td>
-                            <td>700 Points</td>
-                            <td><a class="btn btn-success">Redeem</a></td>
+                            <td>700 - 999 Points</td>
+                            <?php if (($data['pointsuserTotalVote'] > 699) && ($data['pointsuserTotalVote'] < 999)): ?>
+                            <td>
+                                <button class="btn btn-success">Redeem</button>
+                            </td>
+                            <?php else: ?>
+                            <td> <button class="btn btn-success" disabled>Redeem</button></td>
+                            <?php endif; ?>
                         </tr>
                         <tr>
                             <td>Netflix Subscription</td>
-                            <td>1000 Points</td>
-                            <td><a class="btn btn-success">Redeem</a></td>
+                            <td>1000 Points and Above</td>
+                            <?php if (($data['pointsuserTotalVote'] > 999)): ?>
+                            <td>
+                                <button class="btn btn-success">Redeem</button>
+                            </td>
+                            <?php else: ?>
+                            <td> <button class="btn btn-success" disabled>Redeem</button></td>
+                            <?php endif; ?>
                         </tr>
                     </tbody>
                 </table>
@@ -43,47 +68,20 @@
 <section class="leaderboard-section">
     <div class="leaderboard" data-aos="fade-up" data-aos-duration="1000">
         <h3>Top Contributor</h3>
-        <div class="leaderboard-item ">
-            <span class="rank">1</span>
-            <div class="name-section">
-                <i class="fas fa-user"></i>
-                <span>John Doe</span>
-            </div>
-            <span class="points">120 pts</span>
-        </div>
-
+        <?php $count = 1;?>
+        <?php foreach ($data['topVoters'] as $voter): ?>
         <div class="leaderboard-item">
-            <span class="rank">2</span>
+            <span class="rank"><?= $count++;?></span>
             <div class="name-section">
                 <i class="fas fa-user"></i>
-                <span>Jane Smith</span>
+                <span><?= htmlspecialchars($voter->username) ?> </span>
             </div>
-            <span class="points">110 pts</span>
+            <span class="points"><?= $voter->vote_count  * $data['points']->points?> pts</span>
         </div>
-
-        <div class="leaderboard-item">
-            <span class="rank">3</span>
-            <div class="name-section">
-                <i class="fas fa-user"></i>
-                <span>Mike Johnson</span>
-            </div>
-            <span class="points">100 pts</span>
-        </div>
-        <div class="leaderboard-item">
-            <span class="rank">4</span>
-            <div class="name-section">
-                <i class="fas fa-user"></i>
-                <span>Amos Pikins</span>
-            </div>
-            <span class="points">100 pts</span>
-        </div>
-        <div class="leaderboard-item">
-            <span class="rank">5</span>
-            <div class="name-section">
-                <i class="fas fa-user"></i>
-                <span>Tosin Olora</span>
-            </div>
-            <span class="points">100 pts</span>
+        <?php endforeach; ?>
+        <hr>
+        <div style="text-align: right; margin-top: 10px;">
+            <a href="<?= URLROOT?>/contributors" class=" btn btn-success">View All</a>
         </div>
     </div>
 

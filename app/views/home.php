@@ -18,47 +18,20 @@
     <div class="lower-section">
         <div class="leaderboard" data-aos="fade-up" data-aos-duration="1000">
             <h3>Top Contributor</h3>
+            <?php $count = 1;?>
+            <?php foreach ($data['topVoters'] as $voter): ?>
             <div class="leaderboard-item">
-                <span class="rank">1</span>
+                <span class="rank"><?= $count++;?></span>
                 <div class="name-section">
                     <i class="fas fa-user"></i>
-                    <span>John Doe</span>
+                    <span><?= htmlspecialchars($voter->username) ?> </span>
                 </div>
-                <span class="points">120 pts</span>
+                <span class="points"><?= $voter->vote_count  * $data['points']->points?> pts</span>
             </div>
-
-            <div class="leaderboard-item ">
-                <span class="rank">2</span>
-                <div class="name-section">
-                    <i class="fas fa-user"></i>
-                    <span>Jane Smith</span>
-                </div>
-                <span class="points">110 pts</span>
-            </div>
-
-            <div class="leaderboard-item ">
-                <span class="rank">3</span>
-                <div class="name-section">
-                    <i class="fas fa-user"></i>
-                    <span>Mike Johnson</span>
-                </div>
-                <span class="points">100 pts</span>
-            </div>
-            <div class="leaderboard-item ">
-                <span class="rank">4</span>
-                <div class="name-section">
-                    <i class="fas fa-user"></i>
-                    <span>Amos Pikins</span>
-                </div>
-                <span class="points">100 pts</span>
-            </div>
-            <div class="leaderboard-item ">
-                <span class="rank">5</span>
-                <div class="name-section">
-                    <i class="fas fa-user"></i>
-                    <span>Tosin Olora</span>
-                </div>
-                <span class="points">100 pts</span>
+            <?php endforeach; ?>
+            <hr>
+            <div style="text-align: right; margin-top: 10px;">
+                <a href="<?= URLROOT?>/contributors" class=" btn btn-success">View All</a>
             </div>
         </div>
     </div>
@@ -100,7 +73,7 @@
                                 <span class="vote">vote</span>
                                 <span class="poll-points">
                                     <?php if ($poll['hasVoted']): ?>
-                                    10 points
+                                    <?= $data['points']->points ?> points
                                     <?php else: ?>
                                     0 points
                                     <?php endif; ?>
@@ -252,7 +225,7 @@ const isLoggedIn = <?= isset( $_SESSION[SESSION_USER_KEY]) ? 'true' : 'false' ?>
 $(document).ready(function() {
     $('.vote-btn').on('click', function() {
         if (!isLoggedIn) {
-            alert('You must be logged in to vote.');
+            window.location.href = '<?= URLROOT ?>/users/login'; // redirect to login page
             return; // stop further execution
         }
         const pollId = $(this).data('poll-id');
@@ -277,7 +250,7 @@ $(document).ready(function() {
                 // Handle success
                 responseBox.html('<div class="alert alert-success">' + response.message +
                     '</div>');
-                pollPoint.html('<span> 10 points');
+                pollPoint.html('<?= $data['points']->points ?> points');
             })
             .fail(function(xhr) {
                 // Your error handler

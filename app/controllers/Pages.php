@@ -13,9 +13,15 @@ class Pages extends Controller
     {
        $userid = $_SESSION[SESSION_USER_KEY] ?? null;
         $featuredPolls = $this->pollModel->getLoggedInFeaturedPolls($userid);
+        $points = $this->pollModel->getPointSetting();
+        $userTotalVote = $this->pollModel->getUserTotalPoints($userid);
+        $topVoters = $this->pollModel->getUsersByVoteCount();
         // Load View
         $this->view('home', [
-            'featuredPolls' => $featuredPolls
+            'featuredPolls' => $featuredPolls,
+            'points' => $points,
+            'pointsuserTotalVote' => $userTotalVote,
+            'topVoters' => $topVoters,
         ]);
     }
 

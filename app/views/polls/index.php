@@ -81,7 +81,7 @@ const isLoggedIn = <?= isset( $_SESSION[SESSION_USER_KEY]) ? 'true' : 'false' ?>
 $(document).ready(function() {
     $('.vote-btn').on('click', function() {
         if (!isLoggedIn) {
-            alert('You must be logged in to vote.');
+            window.location.href = '<?= URLROOT ?>/users/login';
             return; // stop further execution
         }
         const pollId = $(this).data('poll-id');

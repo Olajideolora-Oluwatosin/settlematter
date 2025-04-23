@@ -74,7 +74,7 @@
                                     <div class="">
                                         <?= flash('flash_message'); ?>
                                         <div class="">
-                                            <a class="d-flex flex-center text-decoration-none mb-4" href="index.html">
+                                            <a class="d-flex flex-center text-decoration-none mb-4" href="<?=URLROOT?>">
                                                 <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block">
                                                     <img src="<?=URLROOT?>/images/logo/settle-matter-dark.png"
                                                         alt="phoenix" width="120" />

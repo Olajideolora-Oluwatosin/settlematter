@@ -139,10 +139,12 @@ body {
   box-shadow: grey;
   border-radius: 20px;
   margin-bottom: 10px;
+
 }
 
 .leaderboard-item:hover {
   background: linear-gradient(to right, #114b5f, #1a926f);
+  transition: 1.5s;
 }
 
 .rank {
@@ -239,7 +241,7 @@ body {
 }
 
 .answer:hover {
-  background-color: #89d599;
+  background-color: gold;
   color: white
 }
 
@@ -392,6 +394,37 @@ body {
   padding: 3px 20px;
   border-radius: 20px;
 }
+
+.page-item {
+  padding: 3px 10px;
+  border-radius: 5px;
+  background-color: white;
+  color: #11565f;
+  margin-right: 5px;
+  border-radius: 1px solid #11565f !important;
+}
+
+.page-item:hover {
+  background-color: #11565f;
+  color: white !important;
+}
+
+.page-item a {
+  text-decoration: none;
+  color: #11565f;
+}
+
+.active {
+  background-color: #11565f !important;
+  color: white !important;
+
+}
+
+.active a {
+  color: white !important;
+
+}
+
 
 /* end of upper polls section */
 

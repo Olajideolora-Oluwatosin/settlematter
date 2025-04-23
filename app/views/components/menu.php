@@ -27,6 +27,10 @@
                             href="<?=URLROOT?>/articles">Articles</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link <?= $current_page == 'articles' ? 'activate' : '' ?>"
+                            href="<?=URLROOT?>/contributors">Contributors</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link <?= $current_page == 'rewards' ? 'activate' : '' ?>"
                             href="<?=URLROOT?>/rewards">Rewards</a>
                     </li>
